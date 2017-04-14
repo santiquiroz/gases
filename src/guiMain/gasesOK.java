@@ -18,7 +18,7 @@ public class gasesOK {
 			datos.getAdministradores().put("sebastian",new Administrador("sebastian","sebas","12345678"));
 			GestorDatos.guardarDatos(datos);
 		}
-		VentanaInicio inicio = new VentanaInicio();
+		VentanaInicio Inicio = new VentanaInicio();
 		System.out.println("termino men");
 		GestorDatos.guardarDatos(datos);
 		System.out.println("guardo men");
