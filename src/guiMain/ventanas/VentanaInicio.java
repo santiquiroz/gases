@@ -39,7 +39,8 @@ public class VentanaInicio extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(640,300);
 		Container Frame = this.getContentPane();
-		Frame.addMouseMotionListener(new oyente2(this));
+		Frame.setBackground(Color.blue);
+		//Frame.addMouseMotionListener(new oyente2(this));
 		Frame.setLayout(new GridLayout(3,1));
 		
 		//P2
@@ -111,8 +112,9 @@ public class VentanaInicio extends JFrame{
 					if (clave.equals("")){
 						throw new CampoVacio();			
 					}
-					if(((datos.getAdministradores().containsKey(usuario)))&&((datos.getAdministradores().get(usuario).getPassword().equals(clave)))){
+					else if(((datos.getAdministradores().containsKey(usuario)))&&((datos.getAdministradores().get(usuario).getPassword().equals(clave)))){
 						new VentanaAdministrador();
+						ventana.dispose();
 					}
 					else{
 					if(((datos.getUsuarios().containsKey(usuario))==false)){
@@ -184,8 +186,9 @@ public class VentanaInicio extends JFrame{
 						if (clave.equals("")){
 							throw new CampoVacio();			
 						}
-						if(((datos.getAdministradores().containsKey(usuario)))&&((datos.getAdministradores().get(usuario).getPassword().equals(clave)))){
+						else if(((datos.getAdministradores().containsKey(usuario)))&&((datos.getAdministradores().get(usuario).getPassword().equals(clave)))){
 							new VentanaAdministrador();
+							ventana.dispose();
 						}
 						else{
 						if(((datos.getUsuarios().containsKey(usuario))==false)){

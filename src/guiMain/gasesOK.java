@@ -5,6 +5,7 @@ import java.util.*;
 import gestorBD.Datos;
 import gestorBD.GestorDatos;
 import gestorPersonas.Administrador;
+import gestorPersonas.Usuario;
 import guiMain.ventanas.VentanaInicio;
 
 public class gasesOK {
@@ -15,7 +16,8 @@ public class gasesOK {
 			System.out.println("no habian datos men");
 			datos = new Datos();
 			//creando usuarios por defecto
-			datos.getAdministradores().put("sebastian",new Administrador("sebastian","sebas","12345678"));
+			datos.getAdministradores().put("sebas",new Administrador("sebastian","sebas","12345678"));
+			datos.getUsuarios().put("santiago",new Usuario("santiago","santiago","1"));
 			GestorDatos.guardarDatos(datos);
 		}
 		VentanaInicio Inicio = new VentanaInicio();
