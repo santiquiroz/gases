@@ -40,7 +40,7 @@ public class VentanaInicio extends JFrame{
 		setSize(640,300);
 		Container Frame = this.getContentPane();
 		Frame.setBackground(Color.blue);
-		//Frame.addMouseMotionListener(new oyente2(this));
+		Frame.addKeyListener(new oyente2(this));
 		Frame.setLayout(new GridLayout(3,1));
 		
 		//P2
@@ -58,30 +58,37 @@ public class VentanaInicio extends JFrame{
 		Frame.add(P3);
 		
 		//L1
-		L1=new JLabel("Bienvenido a la base de datos, por favor ingrese sus datos de inicio de seccion.",SwingConstants.CENTER);
-	
+		L1=new JLabel("Bienvenido a la base de datos ",SwingConstants.CENTER);
+		L1.setFont(new java.awt.Font("Tahoma", 0, 40)); 
 		//P2.add(new JLabel());
 		P2.add(L1);
 		//P2.add(new JLabel());
 		
 		//L2
 		L2=new JLabel("usuario:",SwingConstants.CENTER);
+		L2.setFont(new java.awt.Font("Tahoma", 0, 35)); 
 		P1.add(L2);
 		
 		//TB1
 		TB1=new JTextField();
+		TB1.setFont ( new Font("Dialog", Font.BOLD, 30) ) ;
+		TB1.addKeyListener(new oyente2(this));
 		P1.add(TB1);
 		//L3
 				L3=new JLabel("clave:",SwingConstants.CENTER);
-				
+				L3.setFont(new java.awt.Font("Tahoma", 0, 35)); 
 				P1.add(L3);
-		//TB1
+		//TB2
 				TB2=new JPasswordField();
+				TB2.setFont ( new Font("Dialog", Font.BOLD, 30) ) ;
+				TB2.addKeyListener(new oyente2(this));
 				P1.add(TB2);
 		
 		//B1
 				B1=new JButton("Ingresar");
 				B1.addActionListener(new oyente(this));
+				B1.addKeyListener(new oyente2(this));
+				B1.setFont ( new Font("Dialog", Font.BOLD, 36) ) ;
 				P3.add(B1);
 		
 		setLocationRelativeTo(null);
@@ -113,7 +120,7 @@ public class VentanaInicio extends JFrame{
 						throw new CampoVacio();			
 					}
 					else if(((datos.getAdministradores().containsKey(usuario)))&&((datos.getAdministradores().get(usuario).getPassword().equals(clave)))){
-						new VentanaAdministrador();
+						new VentanaAdministrador(datos.getAdministradores().get(usuario));
 						ventana.dispose();
 					}
 					else{
@@ -126,7 +133,7 @@ public class VentanaInicio extends JFrame{
 						throw new UsuarioNoEncontrado();
 					}
 					else if ((datos.getUsuarios().containsKey(usuario))&&(((datos.getUsuarios().get(usuario).getPassword()).equals(clave)))){
-						new VentanaUsuario();				
+						new VentanaUsuario(datos.getUsuarios().get(usuario));				
 						ventana.dispose();
 					}
 					}
@@ -171,8 +178,8 @@ public class VentanaInicio extends JFrame{
 		}
 
 		@Override
-		public void keyPressed(KeyEvent arg0) {
-			if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+		public void keyPressed(KeyEvent i) {
+			if (i.getKeyCode() == KeyEvent.VK_ENTER) {
 				try{
 					
 						
@@ -187,7 +194,7 @@ public class VentanaInicio extends JFrame{
 							throw new CampoVacio();			
 						}
 						else if(((datos.getAdministradores().containsKey(usuario)))&&((datos.getAdministradores().get(usuario).getPassword().equals(clave)))){
-							new VentanaAdministrador();
+							new VentanaAdministrador(datos.getAdministradores().get(usuario));
 							ventana.dispose();
 						}
 						else{
@@ -200,7 +207,7 @@ public class VentanaInicio extends JFrame{
 							throw new UsuarioNoEncontrado();
 						}
 						else if ((datos.getUsuarios().containsKey(usuario))&&(((datos.getUsuarios().get(usuario).getPassword()).equals(clave)))){
-							new VentanaUsuario();				
+							new VentanaUsuario(datos.getUsuarios().get(usuario));				
 							ventana.dispose();
 						}
 						}
@@ -223,9 +230,48 @@ public class VentanaInicio extends JFrame{
 		}
 
 		@Override
-		public void keyTyped(KeyEvent arg0) {
-			// TODO Auto-generated method stub
-			
+		public void keyTyped(KeyEvent i) {
+			if (i.getKeyCode() == KeyEvent.VK_ENTER) {
+				try{
+					
+						
+						String usuario=TB1.getText();
+						String clave=TB2.getText();
+						TB1.setText("");
+						TB2.setText("");
+						if (usuario.equals("")){
+							throw new CampoVacio();
+						}
+						if (clave.equals("")){
+							throw new CampoVacio();			
+						}
+						else if(((datos.getAdministradores().containsKey(usuario)))&&((datos.getAdministradores().get(usuario).getPassword().equals(clave)))){
+							new VentanaAdministrador(datos.getAdministradores().get(usuario));
+							ventana.dispose();
+						}
+						else{
+						if(((datos.getUsuarios().containsKey(usuario))==false)){
+							System.out.print("puto");
+							throw new UsuarioNoEncontrado();
+						}
+						else if((((datos.getUsuarios().get(usuario).getPassword()).equals(clave))==false)){
+							System.out.print("el que lo lea");
+							throw new UsuarioNoEncontrado();
+						}
+						else if ((datos.getUsuarios().containsKey(usuario))&&(((datos.getUsuarios().get(usuario).getPassword()).equals(clave)))){
+							new VentanaUsuario(datos.getUsuarios().get(usuario));				
+							ventana.dispose();
+						}
+						}
+					
+					}catch(CampoVacio e){
+						new VentanaExcepcion(e);
+					}catch(UsuarioNoEncontrado e){
+						new VentanaExcepcion(e);
+					}
+					
+				}
+		
 		}
 		
 	}

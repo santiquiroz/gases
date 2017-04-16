@@ -2,6 +2,8 @@ package guiMain.ventanas;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.util.*;
@@ -12,8 +14,10 @@ import excepciones.CampoVacio;
 import excepciones.FormatoIncorrectoTelefono;
 import excepciones.VentanaExcepcion;
 import gestorBD.Datos;
+import gestorPersonas.Administrador;
 import guiMain.gasesOK;
 import guiMain.ventanas.VentanaUsuario.oyente;
+import guiMain.ventanas.VentanaUsuario.oyente2;
 public class VentanaAdministrador extends JFrame{
 	//atributos
 	
@@ -27,9 +31,12 @@ public class VentanaAdministrador extends JFrame{
 		private JButton B2;
 		private JButton B3;
 		private JButton B4;
+		public Administrador admin;
+		private JButton B0;
 		//constructor
-		public VentanaAdministrador(){
-			super("usuario");
+		public VentanaAdministrador(Administrador a){
+			super("administrador: "+a.getNombre());
+			admin=a;
 			datos= gasesOK.datos;
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			setSize(900,500);
@@ -47,7 +54,7 @@ public class VentanaAdministrador extends JFrame{
 			//P2
 			
 			P2= new JPanel();
-			P2.setLayout(new GridLayout(3,1));
+			P2.setLayout(new GridLayout(4,1));
 			contenedor.add(P2);
 			
 			//L1
@@ -60,35 +67,44 @@ public class VentanaAdministrador extends JFrame{
 			
 			TB1=new JTextField();
 			TB1.setFont ( new Font("Dialog", Font.BOLD, 70) ) ;
+			TB1.addKeyListener(new oyente2(this));
 			P1.add(TB1);
+			
+			//B0
+			
+			B0=new JButton("Mi cuenta");
+			B0.setFont ( new Font("Dialog", Font.BOLD, 36) ) ;
+			B0.addActionListener(new oyente(this));
+			P2.add(B0);
 			
 			//B1
 			
 			B1=new JButton("Buscar");
 			B1.setFont ( new Font("Dialog", Font.BOLD, 36) ) ;
-			B1.addActionListener(new oyente2(this));
+			B1.addActionListener(new oyente(this));
 			P1.add(B1);
 			
 			//B2
 			
 			B2=new JButton("Trabajadores");
 			B2.setFont ( new Font("Dialog", Font.BOLD, 36) ) ;
-			B2.addActionListener(new oyente2(this));
+			B2.addActionListener(new oyente(this));
 			P2.add(B2);
 			
 			//B3
 			
 			B3=new JButton("Envios");
 			B3.setFont ( new Font("Dialog", Font.BOLD, 36) ) ;
-			B3.addActionListener(new oyente2(this));
+			B3.addActionListener(new oyente(this));
 			P2.add(B3);
 			
 			//B4
 			
 			B4=new JButton("Usuarios");
 			B4.setFont ( new Font("Dialog", Font.BOLD, 36) ) ;
-			B4.addActionListener(new oyente2(this));
+			B4.addActionListener(new oyente(this));
 			P2.add(B4);
+			
 			setLocationRelativeTo(null);
 			this.setVisible(true);
 
@@ -96,13 +112,13 @@ public class VentanaAdministrador extends JFrame{
 		}
 		
 		//listeners 
-		class oyente2 implements ActionListener, MouseMotionListener{
+		class oyente implements ActionListener, MouseMotionListener{
 			private VentanaAdministrador ventana;
 			private long telefono; 
-			public oyente2(){
+			public oyente(){
 				
 			}
-			public oyente2(VentanaAdministrador v){
+			public oyente(VentanaAdministrador v){
 				ventana=v;
 			}
 			
@@ -118,21 +134,26 @@ public class VentanaAdministrador extends JFrame{
 						telefono= Long.parseLong((t));
 						if(datos.getClientes().containsKey(telefono)){
 							new ClienteRegistrado(datos.getClientes().get(telefono));
-							
+							TB1.setText("");
 						}
 						else{
-							new ClienteNuevo();
+							new ClienteNuevo(telefono);
+							TB1.setText("");
+							new ClienteRegistrado(datos.getClientes().get(telefono));
 						}
 						
 					}
 					else if("Trabajadores".equals(comando)){
-						
+						new Trabajadores();
 					}
 					else if("Envios".equals(comando)){
-						
+						new Envios();
 					}
 					else if("Usuarios".equals(comando)){
-						
+						new Usuarios();
+					}
+					else if("Mi cuenta".equals(comando)){
+						new Mi(admin);
 					}
 				}catch(CampoVacio e){
 					new VentanaExcepcion(e);
@@ -154,5 +175,80 @@ public class VentanaAdministrador extends JFrame{
 				
 			}
 			
+		}
+		class oyente2 implements MouseMotionListener,KeyListener{
+			private VentanaAdministrador ventana;
+			public oyente2(VentanaAdministrador v){
+				ventana=v;
+			}
+			@Override
+			public void mouseDragged(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseMoved(MouseEvent arg0) {
+				
+				
+			}
+
+			@Override
+			public void keyPressed(KeyEvent i) {
+				if (i.getKeyCode() == KeyEvent.VK_ENTER) {
+					String t= TB1.getText();
+					if("".equals(t)){
+						try {
+							throw new CampoVacio();
+						} catch (CampoVacio e) {
+							// TODO Auto-generated catch block
+							new VentanaExcepcion(e);
+						}
+					}
+					Long telefono= Long.parseLong((t));
+					if(datos.getClientes().containsKey(telefono)){
+						new ClienteRegistrado(datos.getClientes().get(telefono));
+						TB1.setText("");
+					}
+					else{
+						new ClienteNuevo(telefono);
+						TB1.setText("");
+						new ClienteRegistrado(datos.getClientes().get(telefono));
+					}
+
+				}
+			}
+			
+
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void keyTyped(KeyEvent i) {
+				if (i.getKeyCode() == KeyEvent.VK_ENTER) {
+					String t= TB1.getText();
+					if("".equals(t)){
+						try {
+							throw new CampoVacio();
+						} catch (CampoVacio e) {
+							new VentanaExcepcion(e);
+						}
+					}
+					Long telefono= Long.parseLong((t));
+					if(datos.getClientes().containsKey(telefono)){
+						new ClienteRegistrado(datos.getClientes().get(telefono));
+						TB1.setText("");
+					}
+					else{
+						new ClienteNuevo(telefono);
+						TB1.setText("");
+						new ClienteRegistrado(datos.getClientes().get(telefono));
+					}
+				}
+			
+			}
 		}
 }

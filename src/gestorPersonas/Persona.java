@@ -11,4 +11,7 @@ public class Persona implements Serializable{
 	public String getNombre(){
 		return nombre;
 	}
+	public void setNombre(String n){
+		this.nombre=n;
+	}
 }

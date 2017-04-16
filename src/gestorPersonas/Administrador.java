@@ -17,7 +17,7 @@ public class Administrador extends Persona {
 	public String getPassword(){
 		return password;
 	}
-	public void changePassword(String p){
+	public void setPassword(String p){
 		this.password=p;
 	}
 
